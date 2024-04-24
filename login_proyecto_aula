@@ -1,3 +1,13 @@
+mensaje = [
+    "cuida a los animales.",
+    "Cada vida animal importa. Sé su voz, sé su protector.",
+    "Los animales confían en nosotros para su bienestar. Seamos su voz, su protector y su fuente de amor y seguridad.",
+    "Los animales son nuestros amigos, nuestros compañeros de viaje en este mundo. Trátalos con gentileza y bondad."
+]
+
+for mensaje in mensaje:
+    print(mensaje)
+
 class Usuario:
     def __init__(self, username, password):
         self.username = username
