@@ -9,141 +9,131 @@ for mensaje in mensaje:
     print(mensaje)
 
 class Usuario:
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
-
+    def __init__(self, nombre, correo, contraseña):
+        self.nombre = nombre
+        self.correo = correo
+        self.contraseña = contraseña
 class SistemaUsuarios:
     def __init__(self):
         self.usuarios = []
 
-    def agregar_usuario(self, username, password):
-        nuevo_usuario = Usuario(username, password)
+    def agregar_usuario(self, nombre, correo, contraseña):
+        nuevo_usuario = Usuario(nombre, correo, contraseña)
         self.usuarios.append(nuevo_usuario)
+        print("registro con exito.")
 
-    def autenticar(self, username, password):
+    def verificar_correo_existente(self, correo):
         for usuario in self.usuarios:
-            if usuario.username == username and usuario.password == password:
+            if usuario.correo == correo:
                 return True
         return False
 
-class SIGRAA:
+    def autenticar(self, correo, contraseña):
+        for usuario in self.usuarios:
+            if usuario.correo == correo and usuario.contraseña == contraseña:
+                return True
+        return False
+class RefugioAnimales:
     def __init__(self):
         self.animales = []
 
-    def agregar_animal(self):
-        nombre = input("Ingrese el nombre del animal: ")
-        tipo = input("Ingrese el tipo del animal: ")
-        edad = input("Ingrese la edad del animal: ")
-
-        animal = {"Nombre": nombre, "Tipo": tipo, "Edad": edad}
+    def agregar_animal(self, nombre, tipo):
+        animal = {"Nombre": nombre, "Tipo": tipo}
         self.animales.append(animal)
         print("Animal agregado con éxito.")
 
     def mostrar_animales(self):
         if self.animales:
             print("\nLista de Animales:")
-            for idx, animal in enumerate(self.animales, start=1):
-                print(f"{idx}. Nombre: {animal['Nombre']}, Tipo: {animal['Tipo']}, Edad: {animal['Edad']}")
+            for animal in self.animales:
+                print(f"Nombre: {animal['Nombre']}, Tipo: {animal['Tipo']}")
         else:
             print("No hay animales registrados.")
 
-    def buscar_animal(self):
-        nombre = input("Ingrese el nombre del animal a buscar: ")
-        encontrados = [animal for animal in self.animales if animal["Nombre"] == nombre]
-
-        if encontrados:
-            print("\nAnimales encontrados:")
-            for idx, animal in enumerate(encontrados, start=1):
-                print(f"{idx}. Nombre: {animal['Nombre']}, Tipo: {animal['Tipo']}, Edad: {animal['Edad']}")
-        else:
-            print("No se encontraron animales con ese nombre.")
-
-    def editar_animal(self):
-        nombre = input("Ingrese el nombre del animal a editar: ")
-        encontrado = None
+    def buscar_animal(self, nombre):
         for animal in self.animales:
             if animal["Nombre"] == nombre:
-                encontrado = animal
-                break
+                print(f"Nombre: {animal['Nombre']}, Tipo: {animal['Tipo']}")
+                return
+        print("No se encontró animal con ese nombre.")
 
-        if encontrado:
-            print("\nAnimal encontrado:")
-            print(f"Nombre: {encontrado['Nombre']}, Tipo: {encontrado['Tipo']}, Edad: {encontrado['Edad']}")
-            nuevo_nombre = input("Ingrese el nuevo nombre del animal (deje en blanco para mantener el mismo): ")
-            nuevo_tipo = input("Ingrese el nuevo tipo del animal (deje en blanco para mantener el mismo): ")
-            nueva_edad = input("Ingrese la nueva edad del animal (deje en blanco para mantener la misma): ")
+    def editar_animal(self, nombre, nuevo_tipo):
+        for animal in self.animales:
+            if animal["Nombre"] == nombre:
+                animal["Tipo"] = nuevo_tipo
+                print("Animal editado con éxito.")
+                return
+        print("No se encontró animal con ese nombre.")
 
-            if nuevo_nombre:
-                encontrado["Nombre"] = nuevo_nombre
-            if nuevo_tipo:
-                encontrado["Tipo"] = nuevo_tipo
-            if nueva_edad:
-                encontrado["Edad"] = nueva_edad
-
-            print("Animal editado con éxito.")
-        else:
-            print("No se encontró ningún animal con ese nombre.")
-
-    def eliminar_animal(self):
-        nombre = input("Ingrese el nombre del animal a eliminar: ")
-        eliminado = False
+    def eliminar_animal(self, nombre):
         for animal in self.animales:
             if animal["Nombre"] == nombre:
                 self.animales.remove(animal)
-                eliminado = True
                 print("Animal eliminado con éxito.")
-                break
-
-        if not eliminado:
-            print("No se encontró ningún animal con ese nombre.")
-
-
+                return
+        print("No se encontró animal con ese nombre.")
 def mostrar_menu():
-    print("\n--- Menú SIGRAA ---")
+    print("\n--- Menú del Refugio de Animales ---")
     print("1. Agregar Animal")
     print("2. Mostrar Animales")
     print("3. Buscar Animal")
     print("4. Editar Animal")
     print("5. Eliminar Animal")
     print("6. Salir")
-
 def main():
     sistema_usuarios = SistemaUsuarios()
-    sistema_usuarios.agregar_usuario("admin", "admin123")
+    refugio_animales = RefugioAnimales()
 
     while True:
-        print("\n--- Inicio de Sesión ---")
-        username = input("Nombre de usuario: ")
-        password = input("Contraseña: ")
+        print("\n--- Inicio de Sesión o Registro ---")
+        opcion = input("¿Ya tienes cuenta? (s/n): ").lower()
 
-        if sistema_usuarios.autenticar(username, password):
-            print("Inicio de sesión exitoso. ¡Bienvenido!")
+        if opcion == "s":
+            correo = input("Correo electrónico: ")
+            contraseña = input("Contraseña: ")
 
-            sistema = SIGRAA()
+            if sistema_usuarios.autenticar(correo, contraseña):
+                print("Inicio de sesión exitoso.")
+                break
+            else:
+                print("Credenciales incorrectas. Intenta de nuevo.")
+        elif opcion == "n":
+            nombre = input("Nombre: ")
+            correo = input("Correo electrónico: ")
+            contraseña = input("Contraseña: ")
 
-            while True:
-                mostrar_menu()
-                opcion = input("Seleccione una opción: ")
+            if sistema_usuarios.verificar_correo_existente(correo):
+                print("Correo electrónico ya registrado. Intenta con otro.")
+            else:
+                sistema_usuarios.agregar_usuario(nombre, correo, contraseña)
+        else:
+            print("Opción no válida. Por favor, seleccione 's' o 'n'.")
 
-                if opcion == "1":
-                    sistema.agregar_animal()
-                elif opcion == "2":
-                    sistema.mostrar_animales()
-                elif opcion == "3":
-                    sistema.buscar_animal()
-                elif opcion == "4":
-                    sistema.editar_animal()
-                elif opcion == "5":
-                    sistema.eliminar_animal()
-                elif opcion == "6":
-                    print("Gracias por usar SIGRAA. ¡Hasta luego!")
-                    break
-                else:
-                    print("Opción no válida. Por favor, seleccione una opción válida.")
+    while True:
+        mostrar_menu()
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == "1":
+            nombre = input("Ingrese el nombre del animal: ")
+            tipo = input("Ingrese el tipo del animal: ")
+            refugio_animales.agregar_animal(nombre, tipo)
+        elif opcion == "2":
+            refugio_animales.mostrar_animales()
+        elif opcion == "3":
+            nombre = input("Ingrese el nombre del animal a buscar: ")
+            refugio_animales.buscar_animal(nombre)
+        elif opcion == "4":
+            nombre = input("Ingrese el nombre del animal a editar: ")
+            nuevo_tipo = input("Ingrese el nuevo tipo del animal: ")
+            refugio_animales.editar_animal(nombre, nuevo_tipo)
+        elif opcion == "5":
+            nombre = input("Ingrese el nombre del animal a eliminar: ")
+            refugio_animales.eliminar_animal(nombre)
+        elif opcion == "6":
+            print("bye")
             break
         else:
-            print("Nombre de usuario o contraseña incorrectos. Inténtalo de nuevo.")
+            print("Opción no válida. Por favor, seleccione una opción válida.")
 
 if __name__ == "__main__":
     main()
