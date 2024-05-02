@@ -86,9 +86,9 @@ def main():
 
     while True:
         print("\n--- Inicio de Sesión o Registro ---")
-        opcion = input("¿Ya tienes cuenta? (s/n): ").lower()
+        opcion = input("¿Ya tienes cuenta? (si/no): ").lower()
 
-        if opcion == "s":
+        if opcion == "si":
             correo = input("Correo electrónico: ")
             contraseña = input("Contraseña: ")
 
@@ -97,7 +97,7 @@ def main():
                 break
             else:
                 print("Credenciales incorrectas. Intenta de nuevo.")
-        elif opcion == "n":
+        elif opcion == "no":
             nombre = input("Nombre: ")
             correo = input("Correo electrónico: ")
             contraseña = input("Contraseña: ")
@@ -107,7 +107,7 @@ def main():
             else:
                 sistema_usuarios.agregar_usuario(nombre, correo, contraseña)
         else:
-            print("Opción no válida. Por favor, seleccione 's' o 'n'.")
+            print("Opción no válida. Por favor, seleccione 'si' o 'no'.")
 
     while True:
         mostrar_menu()
